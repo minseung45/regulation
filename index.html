@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>우리 반 규칙 대시보드</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Square+Round:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f0ede5;
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --text-main: #444;
+            --accent-blue: #7baae4;
+            --accent-purple: #a486e8;
+            --accent-orange: #f2994a;
+            --accent-green: #6fcf97;
+            --accent-red: #ff7675;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: var(--bg-color);
+            font-family: 'Nanum Square Round', sans-serif;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            width: 95%;
+            max-width: 1300px;
+            padding: 40px 20px;
+        }
+
+        /* 공통 카드 스타일 */
+        .card {
+            background: var(--card-bg);
+            border-radius: 35px;
+            padding: 40px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        h2 { 
+            font-size: 2.8rem; 
+            margin: 0 0 5px 0; 
+            font-weight: 800;
+        }
+        
+        /* 왼쪽 타이틀 색상 (생활규칙) */
+        .left-title { color: #2d3436; }
+        /* 오른쪽 타이틀 색상 (수업규칙) */
+        .right-title { color: #d35400; }
+
+        p.sub-title { 
+            font-size: 1.1rem; 
+            color: #aaa; 
+            margin-bottom: 35px; 
+            letter-spacing: 2px; 
+            text-transform: uppercase;
+        }
+
+        .rule-list { width: 100%; }
+
+        .rule-item {
+            display: flex;
+            align-items: center;
+            background: #ffffff;
+            width: 100%;
+            padding: 22px;
+            margin-bottom: 18px;
+            border-radius: 22px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+            box-sizing: border-box;
+        }
+
+        .rule-num { 
+            font-size: 1.8rem; 
+            font-weight: 800; 
+            margin-right: 20px; 
+            min-width: 45px;
+        }
+        
+        .rule-text b { font-size: 1.5rem; display: block; margin-bottom: 6px; color: #333; }
+        .rule-text span { font-size: 1rem; color: #777; line-height: 1.4; }
+
+        /* 숫자별 포인트 색상 */
+        .n1 { color: var(--accent-blue); }
+        .n2 { color: var(--accent-purple); }
+        .n3 { color: var(--accent-orange); }
+        .n4 { color: var(--accent-green); }
+        .n5 { color: var(--accent-red); }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="card">
+        <h2 class="left-title">우리 반 생활규칙</h2>
+        <p class="sub-title">Daily Life Rules</p>
+        
+        <div class="rule-list">
+            <div class="rule-item">
+                <div class="rule-num n1">01</div>
+                <div class="rule-text"><b>밝게 인사하기</b><span>선생님과 친구들에게 웃으며 인사해요.</span></div>
+            </div>
+            <div class="rule-item">
+                <div class="rule-num n2">02</div>
+                <div class="rule-text"><b>고운 말 사용하기</b><span>비속어 대신 예쁜 말을 사용해 대화해요.</span></div>
+            </div>
+            <div class="rule-item">
+                <div class="rule-num n3">03</div>
+                <div class="rule-text"><b>복도에서 걷기</b><span>안전을 위해 복도와 계단에서는 천천히 걸어요.</span></div>
+            </div>
+            <div class="rule-item">
+                <div class="rule-num n4">04</div>
+                <div class="rule-text"><b>정리정돈 잘하기</b><span>사용한 물건은 반드시 제자리에 두어요.</span></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2 class="right-title">우리 반 수업규칙</h2>
+        <p class="sub-title">Classroom Learning Rules</p>
+        
+        <div class="rule-list">
+            <div class="rule-item">
+                <div class="rule-num n1">01</div>
+                <div class="rule-text"><b>준비물 챙기기</b><span>수업 시작 전 교과서와 필기구를 준비해요.</span></div>
+            </div>
+            <div class="rule-item">
+                <div class="rule-num n2">02</div>
+                <div class="rule-text"><b>경청의 자세</b><span>발표하는 사람의 눈을 보고 끝까지 들어요.</span></div>
+            </div>
+            <div class="rule-item">
+                <div class="rule-num n3">03</div>
+                <div class="rule-text"><b>손 들고 말하기</b><span>내 의견을 말하고 싶을 땐 손을 들고 기다려요.</span></div>
+            </div>
+            <div class="rule-item">
+                <div class="rule-num n4">04</div>
+                <div class="rule-text"><b>적극적인 참여</b><span>모둠 활동이나 질문에 자신 있게 참여해요.</span></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

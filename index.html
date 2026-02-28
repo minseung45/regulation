@@ -9,7 +9,6 @@
         :root {
             --bg-color: #f0ede5;
             --card-bg: rgba(255, 255, 255, 0.9);
-            --text-main: #444;
             --accent-blue: #7baae4;
             --accent-purple: #a486e8;
             --accent-orange: #f2994a;
@@ -18,139 +17,148 @@
         }
 
         body {
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background-color: var(--bg-color);
+            margin: 0; padding: 0;
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; background-color: var(--bg-color);
             font-family: 'Nanum Square Round', sans-serif;
         }
 
         .container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            width: 95%;
-            max-width: 1300px;
-            padding: 40px 20px;
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 30px; width: 95%; max-width: 1300px; padding: 40px 20px;
         }
 
-        /* 공통 카드 스타일 */
         .card {
-            background: var(--card-bg);
-            border-radius: 35px;
-            padding: 40px;
+            background: var(--card-bg); border-radius: 35px; padding: 40px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.08);
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
+            display: flex; flex-direction: column; align-items: flex-start;
+            position: relative;
         }
 
-        h2 { 
-            font-size: 2.8rem; 
-            margin: 0 0 5px 0; 
-            font-weight: 800;
-        }
-        
-        /* 왼쪽 타이틀 색상 (생활규칙) */
-        .left-title { color: #2d3436; }
-        /* 오른쪽 타이틀 색상 (수업규칙) */
-        .right-title { color: #d35400; }
-
-        p.sub-title { 
-            font-size: 1.1rem; 
-            color: #aaa; 
-            margin-bottom: 35px; 
-            letter-spacing: 2px; 
-            text-transform: uppercase;
-        }
+        h2 { font-size: 2.5rem; margin: 0; font-weight: 800; }
+        .sub-title { font-size: 1rem; color: #aaa; margin-bottom: 30px; letter-spacing: 2px; }
 
         .rule-list { width: 100%; }
-
         .rule-item {
-            display: flex;
-            align-items: center;
-            background: #ffffff;
-            width: 100%;
-            padding: 22px;
-            margin-bottom: 18px;
-            border-radius: 22px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
-            box-sizing: border-box;
+            display: flex; align-items: center; background: #ffffff;
+            width: 100%; padding: 15px 20px; margin-bottom: 15px;
+            border-radius: 22px; position: relative;
         }
 
-        .rule-num { 
-            font-size: 1.8rem; 
-            font-weight: 800; 
-            margin-right: 20px; 
-            min-width: 45px;
-        }
+        .rule-num { font-size: 1.8rem; font-weight: 800; margin-right: 20px; min-width: 45px; }
+        .rule-content { flex-grow: 1; }
         
-        .rule-text b { font-size: 1.5rem; display: block; margin-bottom: 6px; color: #333; }
-        .rule-text span { font-size: 1rem; color: #777; line-height: 1.4; }
+        /* 입력창 스타일 */
+        input {
+            width: 95%; border: 1px solid #eee; padding: 5px;
+            font-family: inherit; border-radius: 5px; display: block;
+        }
+        input.title-input { font-size: 1.4rem; font-weight: 700; margin-bottom: 5px; color: #333; }
+        input.desc-input { font-size: 0.95rem; color: #777; }
 
-        /* 숫자별 포인트 색상 */
-        .n1 { color: var(--accent-blue); }
-        .n2 { color: var(--accent-purple); }
-        .n3 { color: var(--accent-orange); }
-        .n4 { color: var(--accent-green); }
-        .n5 { color: var(--accent-red); }
+        /* 결과 텍스트 스타일 */
+        .view-mode b { font-size: 1.4rem; display: block; margin-bottom: 5px; color: #333; }
+        .view-mode span { font-size: 0.95rem; color: #777; }
 
+        /* 버튼들 */
+        .btn-area { margin-top: 10px; width: 100%; display: flex; gap: 10px; }
+        button { 
+            cursor: pointer; border: none; border-radius: 10px; 
+            padding: 8px 15px; font-weight: bold; font-family: inherit;
+        }
+        .add-btn { background: #eee; color: #666; width: 100%; margin-top: 10px; }
+        .save-btn { background: var(--accent-blue); color: white; position: fixed; bottom: 20px; right: 20px; font-size: 1.2rem; padding: 15px 30px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        .del-btn { background: #ff7675; color: white; padding: 5px 10px; font-size: 0.8rem; }
+
+        .edit-only { display: block; }
+        .view-mode { display: none; }
+
+        /* 저장 후 모드 */
+        body.saved .edit-only { display: none; }
+        body.saved .view-mode { display: block; }
+        body.saved .save-btn { display: none; }
+
+        .n1 { color: var(--accent-blue); } .n2 { color: var(--accent-purple); }
+        .n3 { color: var(--accent-orange); } .n4 { color: var(--accent-green); } .n5 { color: var(--accent-red); }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="card">
-        <h2 class="left-title">우리 반 생활규칙</h2>
+    <div class="card" id="left-card">
+        <h2 style="color:#2d3436">우리 반 생활규칙</h2>
         <p class="sub-title">Daily Life Rules</p>
-        
-        <div class="rule-list">
+        <div class="rule-list" id="left-list">
             <div class="rule-item">
                 <div class="rule-num n1">01</div>
-                <div class="rule-text"><b>밝게 인사하기</b><span>선생님과 친구들에게 웃으며 인사해요.</span></div>
-            </div>
-            <div class="rule-item">
-                <div class="rule-num n2">02</div>
-                <div class="rule-text"><b>고운 말 사용하기</b><span>비속어 대신 예쁜 말을 사용해 대화해요.</span></div>
-            </div>
-            <div class="rule-item">
-                <div class="rule-num n3">03</div>
-                <div class="rule-text"><b>복도에서 걷기</b><span>안전을 위해 복도와 계단에서는 천천히 걸어요.</span></div>
-            </div>
-            <div class="rule-item">
-                <div class="rule-num n4">04</div>
-                <div class="rule-text"><b>정리정돈 잘하기</b><span>사용한 물건은 반드시 제자리에 두어요.</span></div>
+                <div class="rule-content">
+                    <div class="edit-only">
+                        <input type="text" class="title-input" value="밝게 인사하기">
+                        <input type="text" class="desc-input" value="선생님과 친구들에게 웃으며 인사해요.">
+                        <button class="del-btn" onclick="this.parentElement.parentElement.remove()">삭제</button>
+                    </div>
+                    <div class="view-mode"><b></b><span></span></div>
+                </div>
             </div>
         </div>
+        <button class="add-btn edit-only" onclick="addRule('left-list')">+ 새 규칙 추가</button>
     </div>
 
-    <div class="card">
-        <h2 class="right-title">우리 반 수업규칙</h2>
+    <div class="card" id="right-card">
+        <h2 style="color:#d35400">우리 반 수업규칙</h2>
         <p class="sub-title">Classroom Learning Rules</p>
-        
-        <div class="rule-list">
+        <div class="rule-list" id="right-list">
             <div class="rule-item">
                 <div class="rule-num n1">01</div>
-                <div class="rule-text"><b>준비물 챙기기</b><span>수업 시작 전 교과서와 필기구를 준비해요.</span></div>
-            </div>
-            <div class="rule-item">
-                <div class="rule-num n2">02</div>
-                <div class="rule-text"><b>경청의 자세</b><span>발표하는 사람의 눈을 보고 끝까지 들어요.</span></div>
-            </div>
-            <div class="rule-item">
-                <div class="rule-num n3">03</div>
-                <div class="rule-text"><b>손 들고 말하기</b><span>내 의견을 말하고 싶을 땐 손을 들고 기다려요.</span></div>
-            </div>
-            <div class="rule-item">
-                <div class="rule-num n4">04</div>
-                <div class="rule-text"><b>적극적인 참여</b><span>모둠 활동이나 질문에 자신 있게 참여해요.</span></div>
+                <div class="rule-content">
+                    <div class="edit-only">
+                        <input type="text" class="title-input" value="준비물 챙기기">
+                        <input type="text" class="desc-input" value="수업 시작 전 교과서와 필기구를 준비해요.">
+                        <button class="del-btn" onclick="this.parentElement.parentElement.remove()">삭제</button>
+                    </div>
+                    <div class="view-mode"><b></b><span></span></div>
+                </div>
             </div>
         </div>
+        <button class="add-btn edit-only" onclick="addRule('right-list')">+ 새 규칙 추가</button>
     </div>
 </div>
+
+<button class="save-btn" onclick="saveRules()">완료! 배경화면으로 보기</button>
+
+<script>
+    function addRule(listId) {
+        const list = document.getElementById(listId);
+        const count = list.querySelectorAll('.rule-item').length + 1;
+        const colorClass = 'n' + (count % 5 || 5);
+        
+        const newItem = document.createElement('div');
+        newItem.className = 'rule-item';
+        newItem.innerHTML = `
+            <div class="rule-num ${colorClass}">${String(count).padStart(2, '0')}</div>
+            <div class="rule-content">
+                <div class="edit-only">
+                    <input type="text" class="title-input" placeholder="새 규칙 제목">
+                    <input type="text" class="desc-input" placeholder="설명을 입력하세요">
+                    <button class="del-btn" onclick="this.parentElement.parentElement.remove()">삭제</button>
+                </div>
+                <div class="view-mode"><b></b><span></span></div>
+            </div>
+        `;
+        list.appendChild(newItem);
+    }
+
+    function saveRules() {
+        const items = document.querySelectorAll('.rule-item');
+        items.forEach(item => {
+            const title = item.querySelector('.title-input').value;
+            const desc = item.querySelector('.desc-input').value;
+            item.querySelector('.view-mode b').innerText = title;
+            item.querySelector('.view-mode span').innerText = desc;
+        });
+        document.body.classList.add('saved');
+    }
+</script>
 
 </body>
 </html>

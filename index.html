@@ -32,131 +32,137 @@
             background: var(--card-bg); border-radius: 35px; padding: 40px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.08);
             display: flex; flex-direction: column; align-items: flex-start;
-            position: relative;
+            min-height: 600px;
         }
 
         h2 { font-size: 2.5rem; margin: 0; font-weight: 800; }
-        .sub-title { font-size: 1rem; color: #aaa; margin-bottom: 30px; letter-spacing: 2px; }
+        .sub-title { font-size: 1rem; color: #aaa; margin-bottom: 25px; letter-spacing: 2px; }
 
         .rule-list { width: 100%; }
         .rule-item {
             display: flex; align-items: center; background: #ffffff;
-            width: 100%; padding: 15px 20px; margin-bottom: 15px;
-            border-radius: 22px; position: relative;
+            width: 100%; padding: 15px 20px; margin-bottom: 12px;
+            border-radius: 22px; box-sizing: border-box; transition: 0.2s;
         }
 
         .rule-num { font-size: 1.8rem; font-weight: 800; margin-right: 20px; min-width: 45px; }
         .rule-content { flex-grow: 1; }
         
-        /* 입력창 스타일 */
-        input {
-            width: 95%; border: 1px solid #eee; padding: 5px;
-            font-family: inherit; border-radius: 5px; display: block;
-        }
-        input.title-input { font-size: 1.4rem; font-weight: 700; margin-bottom: 5px; color: #333; }
-        input.desc-input { font-size: 0.95rem; color: #777; }
+        .title-txt { font-size: 1.4rem; font-weight: 700; color: #333; display: block; margin-bottom: 5px; border: none; width: 100%; background: transparent; }
+        .desc-txt { font-size: 0.95rem; color: #777; display: block; border: none; width: 100%; background: transparent; }
+        
+        input:focus { outline: none; background: #f9f9f9; border-radius: 8px; }
 
-        /* 결과 텍스트 스타일 */
-        .view-mode b { font-size: 1.4rem; display: block; margin-bottom: 5px; color: #333; }
-        .view-mode span { font-size: 0.95rem; color: #777; }
+        .btn-group { display: flex; gap: 10px; margin-top: 5px; }
+        .del-btn { background: var(--accent-red); color: white; border: none; padding: 4px 10px; border-radius: 8px; cursor: pointer; font-size: 0.7rem; display: none; }
+        .add-btn { background: #eee; color: #666; width: 100%; margin-top: 10px; padding: 12px; border: none; border-radius: 15px; font-weight: bold; cursor: pointer; display: none; }
+        
+        .edit-toggle-btn { position: fixed; top: 20px; right: 20px; padding: 10px 25px; background: white; border-radius: 15px; border: 1px solid #ddd; font-weight: bold; cursor: pointer; z-index: 100; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
 
-        /* 버튼들 */
-        .btn-area { margin-top: 10px; width: 100%; display: flex; gap: 10px; }
-        button { 
-            cursor: pointer; border: none; border-radius: 10px; 
-            padding: 8px 15px; font-weight: bold; font-family: inherit;
-        }
-        .add-btn { background: #eee; color: #666; width: 100%; margin-top: 10px; }
-        .save-btn { background: var(--accent-blue); color: white; position: fixed; bottom: 20px; right: 20px; font-size: 1.2rem; padding: 15px 30px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
-        .del-btn { background: #ff7675; color: white; padding: 5px 10px; font-size: 0.8rem; }
-
-        .edit-only { display: block; }
-        .view-mode { display: none; }
-
-        /* 저장 후 모드 */
-        body.saved .edit-only { display: none; }
-        body.saved .view-mode { display: block; }
-        body.saved .save-btn { display: none; }
+        body.edit-mode .del-btn, body.edit-mode .add-btn { display: block; }
+        body.edit-mode .rule-item { border: 1px dashed var(--accent-blue); }
+        
+        /* 뷰 모드일 때 입력창 클릭 방지 */
+        body:not(.edit-mode) input { pointer-events: none; }
 
         .n1 { color: var(--accent-blue); } .n2 { color: var(--accent-purple); }
         .n3 { color: var(--accent-orange); } .n4 { color: var(--accent-green); } .n5 { color: var(--accent-red); }
     </style>
 </head>
-<body>
+<body class="edit-mode">
+
+<button class="edit-toggle-btn" onclick="toggleEdit()">편집 완료</button>
 
 <div class="container">
-    <div class="card" id="left-card">
+    <div class="card">
         <h2 style="color:#2d3436">우리 반 생활규칙</h2>
         <p class="sub-title">Daily Life Rules</p>
-        <div class="rule-list" id="left-list">
-            <div class="rule-item">
-                <div class="rule-num n1">01</div>
-                <div class="rule-content">
-                    <div class="edit-only">
-                        <input type="text" class="title-input" value="밝게 인사하기">
-                        <input type="text" class="desc-input" value="선생님과 친구들에게 웃으며 인사해요.">
-                        <button class="del-btn" onclick="this.parentElement.parentElement.remove()">삭제</button>
-                    </div>
-                    <div class="view-mode"><b></b><span></span></div>
-                </div>
-            </div>
-        </div>
-        <button class="add-btn edit-only" onclick="addRule('left-list')">+ 새 규칙 추가</button>
+        <div class="rule-list" id="left-list"></div>
+        <button class="add-btn" onclick="addRule('left-list')">+ 새 규칙 추가</button>
     </div>
 
-    <div class="card" id="right-card">
+    <div class="card">
         <h2 style="color:#d35400">우리 반 수업규칙</h2>
         <p class="sub-title">Classroom Learning Rules</p>
-        <div class="rule-list" id="right-list">
-            <div class="rule-item">
-                <div class="rule-num n1">01</div>
-                <div class="rule-content">
-                    <div class="edit-only">
-                        <input type="text" class="title-input" value="준비물 챙기기">
-                        <input type="text" class="desc-input" value="수업 시작 전 교과서와 필기구를 준비해요.">
-                        <button class="del-btn" onclick="this.parentElement.parentElement.remove()">삭제</button>
-                    </div>
-                    <div class="view-mode"><b></b><span></span></div>
-                </div>
-            </div>
-        </div>
-        <button class="add-btn edit-only" onclick="addRule('right-list')">+ 새 규칙 추가</button>
+        <div class="rule-list" id="right-list"></div>
+        <button class="add-btn" onclick="addRule('right-list')">+ 새 규칙 추가</button>
     </div>
 </div>
 
-<button class="save-btn" onclick="saveRules()">완료! 배경화면으로 보기</button>
-
 <script>
-    function addRule(listId) {
-        const list = document.getElementById(listId);
-        const count = list.querySelectorAll('.rule-item').length + 1;
-        const colorClass = 'n' + (count % 5 || 5);
-        
-        const newItem = document.createElement('div');
-        newItem.className = 'rule-item';
-        newItem.innerHTML = `
-            <div class="rule-num ${colorClass}">${String(count).padStart(2, '0')}</div>
-            <div class="rule-content">
-                <div class="edit-only">
-                    <input type="text" class="title-input" placeholder="새 규칙 제목">
-                    <input type="text" class="desc-input" placeholder="설명을 입력하세요">
-                    <button class="del-btn" onclick="this.parentElement.parentElement.remove()">삭제</button>
-                </div>
-                <div class="view-mode"><b></b><span></span></div>
-            </div>
-        `;
-        list.appendChild(newItem);
+    window.onload = function() {
+        loadData('left-list');
+        loadData('right-list');
+    };
+
+    function toggleEdit() {
+        const isEdit = document.body.classList.toggle('edit-mode');
+        document.querySelector('.edit-toggle-btn').innerText = isEdit ? '편집 완료' : '편집하기';
+        if(!isEdit) saveAll(); // 완료 시 한 번 더 저장
     }
 
-    function saveRules() {
-        const items = document.querySelectorAll('.rule-item');
-        items.forEach(item => {
-            const title = item.querySelector('.title-input').value;
-            const desc = item.querySelector('.desc-input').value;
-            item.querySelector('.view-mode b').innerText = title;
-            item.querySelector('.view-mode span').innerText = desc;
+    function addRule(listId, title = '', desc = '') {
+        const list = document.getElementById(listId);
+        const count = list.children.length + 1;
+        const colorClass = 'n' + (count % 5 || 5);
+        
+        const div = document.createElement('div');
+        div.className = 'rule-item';
+        div.innerHTML = `
+            <div class="rule-num ${colorClass}">${String(count).padStart(2, '0')}</div>
+            <div class="rule-content">
+                <input type="text" class="title-txt" placeholder="규칙 제목" value="${title}" oninput="saveAll()">
+                <input type="text" class="desc-txt" placeholder="세부 내용 설명" value="${desc}" oninput="saveAll()">
+                <button class="del-btn" onclick="this.parentElement.parentElement.remove(); saveAll(); renumber('${listId}')">삭제</button>
+            </div>
+        `;
+        list.appendChild(div);
+        saveAll();
+    }
+
+    function renumber(listId) {
+        const list = document.getElementById(listId);
+        Array.from(list.children).forEach((item, idx) => {
+            const numBox = item.querySelector('.rule-num');
+            numBox.innerText = String(idx + 1).padStart(2, '0');
+            numBox.className = 'rule-num n' + ((idx + 1) % 5 || 5);
         });
-        document.body.classList.add('saved');
+    }
+
+    function saveAll() {
+        const leftData = Array.from(document.getElementById('left-list').children).map(item => ({
+            title: item.querySelector('.title-txt').value,
+            desc: item.querySelector('.desc-txt').value
+        }));
+        const rightData = Array.from(document.getElementById('right-list').children).map(item => ({
+            title: item.querySelector('.title-txt').value,
+            desc: item.querySelector('.desc-txt').value
+        }));
+        
+        localStorage.setItem('leftRules_v2', JSON.stringify(leftData));
+        localStorage.setItem('rightRules_v2', JSON.stringify(rightData));
+    }
+
+    function loadData(listId) {
+        const key = listId === 'left-list' ? 'leftRules_v2' : 'rightRules_v2';
+        const saved = JSON.parse(localStorage.getItem(key));
+        
+        if (saved && saved.length > 0) {
+            saved.forEach(data => addRule(listId, data.title, data.desc));
+        } else {
+            // 처음 접속 시 4개씩 기본 생성
+            if(listId === 'left-list') {
+                addRule(listId, '밝게 인사하기', '선생님과 친구들에게 웃으며 인사해요.');
+                addRule(listId, '고운 말 사용하기', '비속어 대신 예쁜 말을 사용해요.');
+                addRule(listId, '복도에서 걷기', '안전을 위해 천천히 걸어 다녀요.');
+                addRule(listId, '정리정돈 잘하기', '사용한 물건은 제자리에 두어요.');
+            } else {
+                addRule(listId, '준비물 챙기기', '수업 시작 전 교과서를 미리 준비해요.');
+                addRule(listId, '경청의 자세', '친구의 발표를 끝까지 귀담아들어요.');
+                addRule(listId, '손 들고 발표하기', '할 말이 있을 때는 손을 들고 기다려요.');
+                addRule(listId, '활동에 참여하기', '모둠 활동에 즐겁게 참여해요.');
+            }
+        }
     }
 </script>
 

@@ -13,6 +13,7 @@
             --accent-purple: #a486e8;
             --accent-orange: #f2994a;
             --accent-green: #6fcf97;
+            --accent-red: #ff7675;
         }
 
         body {
@@ -30,27 +31,26 @@
         .card {
             background: var(--card-bg); border-radius: 35px; padding: 40px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.08);
-            display: flex; flex-direction: column; min-height: 600px;
+            display: flex; flex-direction: column; min-height: 620px;
         }
 
-        h2 { font-size: 2.5rem; margin: 0; font-weight: 800; }
-        .sub-title { font-size: 1rem; color: #aaa; margin-bottom: 25px; letter-spacing: 2px; }
+        h2 { font-size: 2.6rem; margin: 0; font-weight: 800; }
+        .sub-title { font-size: 1rem; color: #aaa; margin-bottom: 30px; letter-spacing: 2px; text-transform: uppercase; }
 
         .rule-list { width: 100%; }
         .rule-item {
             display: flex; align-items: center; background: #ffffff;
-            width: 100%; padding: 18px 25px; margin-bottom: 15px;
-            border-radius: 22px; box-sizing: border-box;
+            width: 100%; padding: 20px 25px; margin-bottom: 12px;
+            border-radius: 22px; box-shadow: 0 2px 10px rgba(0,0,0,0.02);
         }
 
-        .rule-num { font-size: 2.2rem; font-weight: 800; margin-right: 25px; min-width: 50px; }
+        .rule-num { font-size: 2.2rem; font-weight: 800; margin-right: 25px; min-width: 55px; }
         .rule-content { flex-grow: 1; }
-        
-        .title-txt { font-size: 1.6rem; font-weight: 800; color: #333; margin-bottom: 5px; }
-        .desc-txt { font-size: 1.05rem; color: #777; line-height: 1.4; }
+        .title-txt { font-size: 1.65rem; font-weight: 800; color: #333; }
+        .desc-txt { font-size: 1.05rem; color: #777; margin-top: 5px; line-height: 1.4; }
 
         .n1 { color: var(--accent-blue); } .n2 { color: var(--accent-purple); }
-        .n3 { color: var(--accent-orange); } .n4 { color: var(--accent-green); }
+        .n3 { color: var(--accent-orange); } .n4 { color: var(--accent-green); } .n5 { color: var(--accent-red); }
     </style>
 </head>
 <body>
@@ -70,7 +70,7 @@
 </div>
 
 <script>
-    // 선생님의 실제 데이터로 교체
+    // 1. 생활규칙 데이터
     const LEFT_DATA = [
         { t: "선생님께 예의지키기", d: "" },
         { t: "친구들과 사이좋게 지내기", d: "놀리기, 욕하기, 때리기, 빼앗기, 험담하기, 따돌리기 하지 않기" },
@@ -78,41 +78,42 @@
         { t: "조용히 줄 서서 이동하기", d: "" }
     ];
 
+    // 2. 수업규칙 데이터 (새로 주신 5가지 내용 반영)
     const RIGHT_DATA = [
-        { t: "서로 존중하기", d: "친구의 말에 귀 기울이고, 다름을 인정해요" },
-        { t: "수업에 집중하기", d: "선생님이 말씀하실 때 경청하고 적극적으로 참여해요" },
-        { t: "교실을 깨끗하게", d: "내 자리는 내가 정리하고, 함께 쓰는 공간을 소중히 해요" },
-        { t: "시간 약속 지키기", d: "수업 시작 전 자리에 앉고, 정해진 시간을 잘 지켜요" }
+        { t: "수업 준비 미리하기", d: "교과서와 필기구를 미리 꺼내 놓아요." },
+        { t: "바른 자세로 앉기", d: "허리를 펴고 바른 자세로 선생님을 바라봐요." },
+        { t: "필요 없는 물건 꺼내지 않기", d: "수업과 관련 없는 물건은 가방에 넣어요." },
+        { t: "친구와 이야기, 장난하지 않기", d: "수업 시간에는 공부에만 집중해요." },
+        { t: "휴대폰 끄기", d: "수업 시작 전 휴대폰은 반드시 끄거나 제출해요." }
     ];
 
     function render() {
-        // 오류 방지를 위해 기존 저장 데이터를 강제로 삭제합니다.
-        localStorage.clear();
+        localStorage.clear(); // 이전의 잘못된 데이터 삭제
 
         const leftContainer = document.getElementById('left-list');
         const rightContainer = document.getElementById('right-list');
 
+        // 왼쪽 출력
         LEFT_DATA.forEach((rule, i) => {
-            leftContainer.innerHTML += `
-                <div class="rule-item">
-                    <div class="rule-num n${i+1}">${String(i+1).padStart(2, '0')}</div>
-                    <div class="rule-content">
-                        <div class="title-txt">${rule.t}</div>
-                        ${rule.d ? `<div class="desc-txt">${rule.d}</div>` : ''}
-                    </div>
-                </div>`;
+            leftContainer.innerHTML += createItemHtml(i + 1, rule.t, rule.d);
         });
 
+        // 오른쪽 출력
         RIGHT_DATA.forEach((rule, i) => {
-            rightContainer.innerHTML += `
-                <div class="rule-item">
-                    <div class="rule-num n${i+1}">${String(i+1).padStart(2, '0')}</div>
-                    <div class="rule-content">
-                        <div class="title-txt">${rule.t}</div>
-                        ${rule.d ? `<div class="desc-txt">${rule.d}</div>` : ''}
-                    </div>
-                </div>`;
+            rightContainer.innerHTML += createItemHtml(i + 1, rule.t, rule.d);
         });
+    }
+
+    function createItemHtml(num, title, desc) {
+        const colorClass = 'n' + (num % 5 || 5);
+        return `
+            <div class="rule-item">
+                <div class="rule-num ${colorClass}">${String(num).padStart(2, '0')}</div>
+                <div class="rule-content">
+                    <div class="title-txt">${title}</div>
+                    ${desc ? `<div class="desc-txt">${desc}</div>` : ''}
+                </div>
+            </div>`;
     }
 
     render();

@@ -19,37 +19,43 @@
         body {
             margin: 0; padding: 0;
             display: flex; justify-content: center; align-items: center;
-            min-height: 100vh; background-color: var(--bg-color);
+            height: 100vh; background-color: var(--bg-color); /* 높이 고정 */
             font-family: 'Nanum Square Round', sans-serif;
+            overflow: hidden; /* 스크롤바 제거 */
         }
 
         .container {
             display: grid; grid-template-columns: 1fr 1fr;
-            gap: 30px; width: 95%; max-width: 1300px; padding: 40px 20px;
+            gap: 20px; width: 98%; max-width: 1400px; height: 90vh; /* 높이 제한 */
         }
 
         .card {
-            background: var(--card-bg); border-radius: 35px; padding: 40px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.08);
-            display: flex; flex-direction: column; min-height: 620px;
+            background: var(--card-bg); border-radius: 30px; padding: 25px 35px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+            display: flex; flex-direction: column; height: 100%; box-sizing: border-box;
         }
 
-        h2 { font-size: 2.6rem; margin: 0; font-weight: 800; }
-        .sub-title { font-size: 1rem; color: #aaa; margin-bottom: 30px; letter-spacing: 2px; text-transform: uppercase; }
+        h2 { font-size: 2.2rem; margin: 0; font-weight: 800; }
+        .sub-title { font-size: 0.9rem; color: #aaa; margin-bottom: 15px; letter-spacing: 1px; }
 
-        .rule-list { width: 100%; }
+        .rule-list { 
+            display: flex; flex-direction: column; justify-content: space-between; 
+            flex-grow: 1; /* 남은 공간을 균등하게 배분 */
+        }
+
         .rule-item {
             display: flex; align-items: center; background: #ffffff;
-            width: 100%; padding: 25px 30px; margin-bottom: 15px;
-            border-radius: 25px; box-shadow: 0 2px 10px rgba(0,0,0,0.02);
-            min-height: 90px; /* 세부내용이 없으므로 높이를 일정하게 유지 */
+            width: 100%; padding: 15px 22px; 
+            border-radius: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+            box-sizing: border-box;
         }
 
-        .rule-num { font-size: 2.4rem; font-weight: 800; margin-right: 30px; min-width: 60px; }
+        .rule-num { font-size: 2rem; font-weight: 800; margin-right: 20px; min-width: 50px; }
         .rule-content { flex-grow: 1; }
-        .title-txt { font-size: 1.8rem; font-weight: 800; color: #333; line-height: 1.2; }
-        .desc-txt { font-size: 1.05rem; color: #777; margin-top: 5px; line-height: 1.4; }
+        .title-txt { font-size: 1.55rem; font-weight: 800; color: #333; line-height: 1.2; }
+        .desc-txt { font-size: 0.95rem; color: #777; margin-top: 3px; line-height: 1.3; }
 
+        /* 색상 클래스 */
         .n1 { color: var(--accent-blue); } .n2 { color: var(--accent-purple); }
         .n3 { color: var(--accent-orange); } .n4 { color: var(--accent-green); } .n5 { color: var(--accent-red); }
     </style>
@@ -71,7 +77,6 @@
 </div>
 
 <script>
-    // 1. 생활규칙 데이터
     const LEFT_DATA = [
         { t: "선생님께 예의지키기", d: "" },
         { t: "친구들과 사이좋게 지내기", d: "놀리기, 욕하기, 때리기, 빼앗기, 험담하기, 따돌리기 하지 않기" },
@@ -79,7 +84,6 @@
         { t: "조용히 줄 서서 이동하기", d: "" }
     ];
 
-    // 2. 수업규칙 데이터 (요청하신 대로 세부 내용 d를 모두 비웠습니다)
     const RIGHT_DATA = [
         { t: "수업 준비 미리하기", d: "" },
         { t: "바른 자세로 앉기", d: "" },
@@ -89,8 +93,7 @@
     ];
 
     function render() {
-        localStorage.clear(); 
-
+        localStorage.clear();
         const leftContainer = document.getElementById('left-list');
         const rightContainer = document.getElementById('right-list');
 
@@ -114,9 +117,7 @@
                 </div>
             </div>`;
     }
-
     render();
 </script>
-
 </body>
 </html>

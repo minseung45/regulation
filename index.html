@@ -21,6 +21,7 @@
             display: flex; justify-content: center; align-items: center;
             min-height: 100vh; background-color: var(--bg-color);
             font-family: 'Nanum Square Round', sans-serif;
+            overflow-x: hidden;
         }
 
         .container {
@@ -36,23 +37,61 @@
         }
 
         h2 { font-size: 2.5rem; margin: 0; font-weight: 800; }
-        .sub-title { font-size: 1rem; color: #aaa; margin-bottom: 25px; letter-spacing: 2px; }
+        .sub-title { font-size: 1rem; color: #aaa; margin-bottom: 25px; letter-spacing: 2px; text-transform: uppercase; }
 
         .rule-list { width: 100%; }
         .rule-item {
             display: flex; align-items: center; background: #ffffff;
-            width: 100%; padding: 15px 20px; margin-bottom: 12px;
-            border-radius: 22px; box-sizing: border-box; transition: 0.2s;
+            width: 100%; padding: 18px 25px; margin-bottom: 15px;
+            border-radius: 22px; box-sizing: border-box; border: 1px solid transparent;
         }
 
-        .rule-num { font-size: 1.8rem; font-weight: 800; margin-right: 20px; min-width: 45px; }
-        .rule-content { flex-grow: 1; }
+        .rule-num { font-size: 2rem; font-weight: 800; margin-right: 25px; min-width: 50px; }
+        .rule-content { flex-grow: 1; display: flex; flex-direction: column; }
         
-        /* 입력창 스타일 */
-        .title-txt { font-size: 1.4rem; font-weight: 700; color: #333; display: block; margin-bottom: 5px; border: none; width: 100%; background: transparent; }
-        .desc-txt { font-size: 0.95rem; color: #777; display: block; border: none; width: 100%; background: transparent; }
-        input:focus { outline: none; background: #f9f9f9; border-radius: 8px; }
+        .title-txt { font-size: 1.5rem; font-weight: 700; color: #333; border: none; width: 100%; background: transparent; padding: 2px 0; }
+        .desc-txt { font-size: 1rem; color: #777; border: none; width: 100%; background: transparent; padding: 2px 0; margin-top: 4px; }
+        
+        input:focus { outline: none; background: rgba(0,0,0,0.03); border-radius: 5px; }
 
-        /* 버튼 스타일 */
-        .del-btn { background: var(--accent-red); color: white; border: none; padding: 4px 10px; border-radius: 8px; cursor: pointer; font-size: 0.7rem; display: none; margin-top: 5px; }
-        .add-btn { background: #eee; color: #666; width: 100%; margin-top: 10px; padding: 12px; border: none; border-radius: 15px; font-weight:
+        .del-btn { background: var(--accent-red); color: white; border: none; padding: 6px 12px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; margin-top: 8px; align-self: flex-start; display: none; }
+        .add-btn { background: #e0e0e0; color: #555; width: 100%; margin-top: 15px; padding: 15px; border: none; border-radius: 20px; font-weight: bold; cursor: pointer; display: none; font-size: 1rem; }
+        
+        .edit-toggle-btn { position: fixed; top: 20px; right: 20px; padding: 12px 30px; background: white; border-radius: 50px; border: 1px solid #ddd; font-weight: 800; cursor: pointer; z-index: 1000; box-shadow: 0 4px 15px rgba(0,0,0,0.15); transition: 0.2s; }
+        .edit-toggle-btn:hover { transform: scale(1.05); background: #f9f9f9; }
+
+        /* 상태 제어 */
+        body.edit-mode .del-btn, body.edit-mode .add-btn { display: block; }
+        body.edit-mode .rule-item { border: 2px dashed var(--accent-blue); }
+        body:not(.edit-mode) input { pointer-events: none; }
+        body:not(.edit-mode) .desc-txt[value=""] { display: none; }
+
+        .n1 { color: var(--accent-blue); } .n2 { color: var(--accent-purple); }
+        .n3 { color: var(--accent-orange); } .n4 { color: var(--accent-green); } .n5 { color: var(--accent-red); }
+    </style>
+</head>
+<body class="view-mode">
+
+<button class="edit-toggle-btn" onclick="toggleEdit()">편집하기</button>
+
+<div class="container">
+    <div class="card">
+        <h2 style="color:#2d3436">우리 반 생활규칙</h2>
+        <p class="sub-title">Daily Life Rules</p>
+        <div class="rule-list" id="left-list"></div>
+        <button class="add-btn" onclick="addRule('left-list')">+ 새 규칙 추가</button>
+    </div>
+
+    <div class="card">
+        <h2 style="color:#d35400">우리 반 수업규칙</h2>
+        <p class="sub-title">Classroom Learning Rules</p>
+        <div class="rule-list" id="right-list"></div>
+        <button class="add-btn" onclick="addRule('right-list')">+ 새 규칙 추가</button>
+    </div>
+</div>
+
+<script>
+    const DEFAULT_LEFT = [
+        {title: "선생님께 예의지키기", desc: ""},
+        {title: "친구들과 사이좋게 지내기", desc: "놀리기, 욕하기, 때리기, 빼앗기, 험담하기, 따돌리기 하지 않기"},
+        {title: "뛰어다니거나 위험한 행동하지 않기", desc: ""},
